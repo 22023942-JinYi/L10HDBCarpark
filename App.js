@@ -18,23 +18,21 @@ const App = () => {
 
     const url = 'https://data.gov.sg/api/action/datastore_search?resource_id=d_23f946fa557947f93a8043bbef41dd09';
 
-    // Fetch data from the URL
     useEffect(() => {
         fetch(url)
             .then((response) => response.json())
             .then((myJson) => {
-                const records = myJson.result.records; // Access the records array
+                const records = myJson.result.records;
                 setMyData(records);
                 setOriginalData(records);
             })
             .catch((error) => console.error('Error fetching data:', error));
     }, []);
 
-    // Filter data based on search input and active filters
     const applyFilters = () => {
         let filteredData = originalData;
 
-        // Apply search filter
+    
         if (searchText !== '') {
             filteredData = filteredData.filter(
                 (item) =>
@@ -43,14 +41,13 @@ const App = () => {
             );
         }
 
-        // Apply night parking filter
+
         if (nightParkingFilter) {
             filteredData = filteredData.filter(
                 (item) => item.night_parking.toLowerCase() === 'yes'
             );
         }
 
-        // Apply free parking filter
         if (freeParkingFilter) {
             filteredData = filteredData.filter(
                 (item) => item.free_parking.toLowerCase() !== 'no'
@@ -60,27 +57,22 @@ const App = () => {
         setMyData(filteredData);
     };
 
-    // Handle changes in search text
     const handleSearchTextChange = (text) => {
         setSearchText(text);
     };
 
-    // Toggle night parking filter
     const toggleNightParkingFilter = () => {
         setNightParkingFilter(!nightParkingFilter);
     };
 
-    // Toggle free parking filter
     const toggleFreeParkingFilter = () => {
         setFreeParkingFilter(!freeParkingFilter);
     };
 
-    // Apply filters whenever a filter state or search text changes
     useEffect(() => {
         applyFilters();
     }, [nightParkingFilter, freeParkingFilter, searchText]);
 
-    // Render each item
     const renderItem = ({ item }) => {
         return (
             <View style={styles.itemContainer}>
